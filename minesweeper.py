@@ -1,8 +1,3 @@
-# TO DO
-#area none bomb
-#if board[tilex][tiley] == 0:
-#    get random 3 locations
-#repeat
 import sys, pygame, random
 from pygame.locals import *
 
@@ -92,12 +87,12 @@ def main():
                         Mboard = getStartingBoard(BOARDWIDTH, BOARDHEIGHT)
                         msg = 'Try to find ' + str(NUMBOMB) + ' bombs.'
                         drawBoard(Mboard, msg)
-                        flagLocation = []
+                        flagLocation = []   #keep track of all thee flags
                     elif SOLVE_RECT.collidepoint(event.pos):    # clicked on Solve button
                         solve(bombLocation)
                 else:
                     if (event.button == 3):
-                        # print((spotx, spoty))
+                        print((spotx, spoty))
                         if NUMFLAG > 0:
                             NUMFLAG = putFlag(NUMFLAG, flagLocation, spotx, spoty)
                         else:
@@ -109,17 +104,6 @@ def main():
                     else:
                         underneath(spotx, spoty, board, bombLocation)
             checkWin(flagLocation, bombLocation)
-
-        # for event in pygame.event.get(): # event handling loop
-        #     if event.type == MOUSEBUTTONUP:
-        #         spotx, spoty = getSpotClicked(mainBoard, event.pos[0], event.pos[1])
-        #         if (spotx, spoty) == (None, None):
-        #             # check if the user clicked on an option button
-        #             if NEW_RECT.collidepoint(event.pos):  # clicked on New Game button
-        #                 gameOver = False
-        #                 mainBoard = getStartingBoard(BOARDWIDTH, BOARDHEIGHT)
-        #                 board, bombLocation = newGame(BOARDWIDTH, BOARDHEIGHT, NUMBOMB)
-
 
         pygame.display.update()
         FPSCLOCK.tick(FPS)
@@ -165,7 +149,7 @@ def drawBoard(board, message):
     pygame.draw.rect(DISPLAYSURF, BORDERCOLOR, (left - 5, top - 5, width + 10, height + 10), 4)
     DISPLAYSURF.blit(NEW_SURF, NEW_RECT)
     DISPLAYSURF.blit(SOLVE_SURF, SOLVE_RECT)
-    for row in range(BOARDWIDTH):
+    for row in range(BOARDWIDTH):       #draw tiles
         for column in range(BOARDHEIGHT):
 
             pygame.draw.rect(DISPLAYSURF,
@@ -200,7 +184,7 @@ def getSpotClicked(board, x, y):
                 return (tileX, tileY)
     return (None, None)
 
-def getSurounding(board):
+def getSurounding(board):       #count the number of bombs surrounding
     for i in range(BOARDWIDTH):
         for j in range(BOARDHEIGHT):
             if not (board[i][j] == BOMB):
@@ -309,7 +293,7 @@ def putFlag(numFlag, flagLocation, spotx, spoty):
         numFlag -= 1
         flagLocation.append((spotx, spoty))
     msg = 'Flags: ' + str(numFlag) + '  '
-    # print(flagLocation)
+    print(flagLocation)
 
     textSurf, textRect = makeText(msg, MESSAGECOLOR, BGCOLOR, WINDOWWIDTH - 120, 5)
     DISPLAYSURF.blit(textSurf, textRect)
@@ -328,5 +312,6 @@ def checkWin(FlagLocation, bombLocation):
     if win == True:
         textSurf, textRect = makeText("You won!", MESSAGECOLOR, BGCOLOR, 5, 5)
         DISPLAYSURF.blit(textSurf, textRect)
+
 if __name__ == '__main__':
     main()
